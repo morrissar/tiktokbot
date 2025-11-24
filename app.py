@@ -30,6 +30,8 @@ class LoggingMiddleware(BaseMiddleware):
         return result
 
 async def main():
+    print("=== Бот запускается ===")
+    print(f"Token: {'*' * 10}{os.getenv('TOKEN')[-4:] if os.getenv('TOKEN') else 'NOT FOUND'}")
     bot = Bot(token=os.getenv('TOKEN'))
     dp = Dispatcher()
     dp.include_router(user)
@@ -55,4 +57,5 @@ if __name__ == '__main__':
     try:
         asyncio.run(main()) 
     except KeyboardInterrupt:
+
         print('Бот выключен!')
