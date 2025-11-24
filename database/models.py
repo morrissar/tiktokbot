@@ -9,6 +9,8 @@ async_session = async_sessionmaker(engine, expire_on_commit=False)
 class Base(AsyncAttrs, DeclarativeBase):
     pass
 
+print(f"Database path: {os.path.abspath('db.sqlite3')}")
+
 class User(Base):
     __tablename__ = 'users'
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -18,6 +20,7 @@ class User(Base):
 async def async_main():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
 
 
 
