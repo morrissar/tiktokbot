@@ -37,6 +37,7 @@ async def main():
     dp.include_router(user)
     
     await async_main()
+    print("✅ База данных инициализирована")
     
     scheduler = SimpleScheduler(bot)
     scheduler_task = asyncio.create_task(scheduler.start())
@@ -59,3 +60,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
 
         print('Бот выключен!')
+
