@@ -26,4 +26,5 @@ class SimpleScheduler:
     async def stop(self):
         self.is_running = False
     async def send_reminder(self, tg_id):
+        print(f"⏰ Отправляю напоминание пользователю {tg_id}")
         await self.bot.send_message(chat_id=tg_id, text="⏰ Напоминание! Пора продолжить серию в TikTok! 🎬")
