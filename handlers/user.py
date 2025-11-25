@@ -25,7 +25,7 @@ async def start(message: Message):
 @user.message(F.text == 'Новое напоминание.')
 async def new_reminder(message: Message, state: FSMContext):
     await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
-    await message.answer('Введите время напоминания в формате "HH:MM", например, 16:30. (Учитывайте часовой пояс МСК+5!)', reply_markup=kb.after_reminder)
+    await message.answer('Введите время напоминания в формате "HH:MM", например, 16:30. (Учитывайте часовой пояс МСК+8!)', reply_markup=kb.after_reminder)
     await state.set_state(Test.target_time)
 
 @user.message(Test.target_time) 
@@ -54,24 +54,6 @@ async def save_reminder_time(message: Message, state: FSMContext):
     if minutes < 0 or minutes > 59:
         await message.answer("❌ Минуты должны быть от 00 до 59!")
         return
-    if hours >= 8 and hours <= 23:
-        hours -= 8
-    elif hours == 7:
-        hours = 23
-    elif hours == 6:
-        hours = 22
-    elif hours == 5:
-        hours = 21
-    elif hours == 4:
-        hours = 20
-    elif hours == 3:
-        hours == 19
-    elif hours == 2:
-        hours = 18
-    elif hours == 1:
-        hours = 17
-    elif hours == 0:
-        hours = 16
     await state.update_data(target_time=time_text)
     data = await state.get_data()    
     await save_info_user(message.from_user.id, data["target_time"])     
@@ -90,4 +72,5 @@ async def back_to_menu(message: Message, state: FSMContext):
     await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
     await message.answer_photo(photo='https://yt3.googleusercontent.com/zfLrkQRuN_NSn9axjTm2UxuWBKc3t8N1c3QOSPTBTqhwEEWpUj61YK3DQsMRZz_gARtievGS=s900-c-k-c0x00ffffff-no-rj',
                                caption='Привет! Я бот "Продолжи сериию в TikTok"! Я готов напомнать тебе об отправке сообщений своим друзьям! Используй кнопки для управления!', reply_markup=kb.main)
+
 
