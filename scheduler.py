@@ -46,7 +46,7 @@ class SimpleScheduler:
         
         while self.is_running:
             await self.check_reminders()
-            await asyncio.sleep(30)  # Проверяем каждые 30 секунд
+            await asyncio.sleep(30)
 
     async def stop(self):
         """Остановка планировщика"""
