@@ -16,32 +16,35 @@ class LoggingMiddleware(BaseMiddleware):
     async def __call__(self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]) -> Any:
         result = await handler(event, data)
         return result
-
-async def main():
-    print("=== Бот запускается ===")
-    print(f"Token: {'*' * 10}{os.getenv('TOKEN')[-4:] if os.getenv('TOKEN') else 'NOT FOUND'}")
-    bot = Bot(token=os.getenv('TOKEN'))
-    dp = Dispatcher()
-    dp.include_router(user)
-    
-    await async_main()
-    print("✅ База данных инициализирована")
-    
-    scheduler = SimpleScheduler(bot)
-    scheduler_task = asyncio.create_task(scheduler.start())
-    
-    await bot.delete_webhook(drop_pending_updates=True)
-    
-    try:
-        await dp.start_polling(bot)
-    except Exception as e:
-        print(f'Ошибка: {e}')
-    finally:
-        print("Останавливаем бота...")
-        await scheduler.stop()
-        if 'scheduler_task' in locals():
-            scheduler_task.cancel()
-        await bot.session.close()
+        
+    async def main():
+        print("=== Бот запускается ===")
+        print(f"Token: {'*' * 10}{os.getenv('TOKEN')[-4:] if os.getenv('TOKEN') else 'NOT FOUND'}")
+        bot = Bot(token=os.getenv('TOKEN'))
+        dp = Dispatcher()
+        dp.include_router(user)
+        
+        await async_main()
+        print("✅ База данных инициализирована")
+        
+        scheduler = SimpleScheduler(bot)
+        scheduler_task = asyncio.create_task(scheduler.start())
+        
+        await bot.delete_webhook(drop_pending_updates=True)
+        
+        while True:
+            try:
+                await dp.start_polling(bot)
+            except Exception as e:
+                print(f'❌ Ошибка polling: {e}')
+                print('🔄 Перезапуск через 10 секунд...')
+                await asyncio.sleep(10)
+            finally:
+                print("Останавливаем бота...")
+                await scheduler.stop()
+                if 'scheduler_task' in locals():
+                    scheduler_task.cancel()
+                await bot.session.close()
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
@@ -51,6 +54,7 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
 
         print('Бот выключен!')
+
 
 
 
