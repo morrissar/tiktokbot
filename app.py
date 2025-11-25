@@ -12,18 +12,6 @@ from handlers.user import user
 from database.models import async_main
 from scheduler import SimpleScheduler 
 
-from aiogram.client.default import DefaultBotProperties
-from aiogram.client.session.aiohttp import AiohttpSession
-
-session = AiohttpSession()
-bot = Bot(
-    token=os.getenv('TOKEN'),
-    session=session,
-    default=DefaultBotProperties(
-        parse_mode='HTML'
-    )
-)
-
 class LoggingMiddleware(BaseMiddleware):
     async def __call__(self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]) -> Any:
         result = await handler(event, data)
@@ -60,4 +48,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
 
         print('Бот выключен!')
+
 
