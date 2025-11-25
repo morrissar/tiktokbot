@@ -34,11 +34,14 @@ async def main():
     
     try:
         await dp.start_polling(bot)
-    except KeyboardInterrupt:
-        print('Бот выключен!')
+    except Exception as e:
+        print(f'Ошибка: {e}')
     finally:
+        print("Останавливаем бота...")
         await scheduler.stop()
-        scheduler_task.cancel()
+        if 'scheduler_task' in locals():
+            scheduler_task.cancel()
+        await bot.session.close()
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
@@ -48,5 +51,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
 
         print('Бот выключен!')
+
 
 
