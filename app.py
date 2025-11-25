@@ -17,38 +17,47 @@ class LoggingMiddleware(BaseMiddleware):
         result = await handler(event, data)
         return result
 
-# ⬇️ ДОБАВЬ ЭТУ ФУНКЦИЮ ⬇️
 async def main():
     print("=== Бот запускается ===")
     print(f"Token: {'*' * 10}{os.getenv('TOKEN')[-4:] if os.getenv('TOKEN') else 'NOT FOUND'}")
+    
     bot = Bot(token=os.getenv('TOKEN'))
     dp = Dispatcher()
     dp.include_router(user)
     
+    # Инициализация базы данных
     await async_main()
     print("✅ База данных инициализирована")
     
+    # Запуск планировщика
     scheduler = SimpleScheduler(bot)
     scheduler_task = asyncio.create_task(scheduler.start())
     
     await bot.delete_webhook(drop_pending_updates=True)
     
     try:
+        print("✅ Бот запущен и готов к работе")
         await dp.start_polling(bot)
     except Exception as e:
-        print(f'Ошибка: {e}')
+        print(f'❌ Ошибка: {e}')
     finally:
-        print("Останавливаем бота...")
-        await scheduler.stop()
-        if 'scheduler_task' in locals():
+        print("🛑 Останавливаем бота...")
+        await scheduler.stop()  # Теперь этот метод существует
+        if scheduler_task and not scheduler_task.done():
             scheduler_task.cancel()
+            try:
+                await scheduler_task
+            except asyncio.CancelledError:
+                pass
         await bot.session.close()
-# ⬆️ КОНЕЦ ФУНКЦИИ ⬆️
+        print("✅ Бот остановлен")
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    print('Бот включен!')
+    print('🚀 Бот включается...')
     try:
         asyncio.run(main()) 
     except KeyboardInterrupt:
-        print('Бот выключен!')
+        print('🛑 Бот выключен по команде пользователя!')
+    except Exception as e:
+        print(f'❌ Критическая ошибка: {e}')
