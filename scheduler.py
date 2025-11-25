@@ -9,8 +9,8 @@ class SimpleScheduler:
         self.is_running = False
 
     async def send_reminder(self, tg_id):
-        """Отправка напоминания пользователю"""
         try:
+            print(f"🔄 Попытка отправить сообщение пользователю {tg_id}")
             await self.bot.send_message(
                 chat_id=tg_id,
                 text="⏰ Напоминание! Пора продолжить серию в TikTok!"
@@ -18,6 +18,9 @@ class SimpleScheduler:
             print(f"✅ Напоминание отправлено пользователю {tg_id}")
         except Exception as e:
             print(f"❌ Ошибка отправки напоминания {tg_id}: {e}")
+            # Подробная информация об ошибке
+            import traceback
+            print(f"🔍 Детали ошибки: {traceback.format_exc()}")
 
     async def check_reminders(self):
         """Проверка напоминаний"""
@@ -52,3 +55,4 @@ class SimpleScheduler:
         """Остановка планировщика"""
         self.is_running = False
         print("✅ Планировщик остановлен")
+
