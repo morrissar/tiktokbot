@@ -3,19 +3,13 @@ import logging
 import asyncio 
 import os
 from dotenv import load_dotenv
-from typing import Callable, Dict, Any, Awaitable
 
 load_dotenv()
 
-from aiogram import Bot, Dispatcher, BaseMiddleware
+from aiogram import Bot, Dispatcher
 from handlers.user import user
 from database.models import async_main
 from scheduler import SimpleScheduler 
-
-class LoggingMiddleware(BaseMiddleware):
-    async def __call__(self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]) -> Any:
-        result = await handler(event, data)
-        return result
 
 async def main():
     print("=== Бот запускается ===")
@@ -42,13 +36,20 @@ async def main():
         print(f'❌ Ошибка: {e}')
     finally:
         print("🛑 Останавливаем бота...")
-        await scheduler.stop()  # Теперь этот метод существует
+        # Останавливаем планировщик
+        if hasattr(scheduler, 'stop'):
+            await scheduler.stop()
+        else:
+            scheduler.is_running = False
+        
+        # Отменяем задачу планировщика
         if scheduler_task and not scheduler_task.done():
             scheduler_task.cancel()
             try:
                 await scheduler_task
             except asyncio.CancelledError:
                 pass
+        
         await bot.session.close()
         print("✅ Бот остановлен")
 
