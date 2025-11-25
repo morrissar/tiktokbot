@@ -9,7 +9,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram import F
 
 class Test(StatesGroup):
-	target_time = State()
+    target_time = State()
 
 user = Router()
 
@@ -17,9 +17,9 @@ import keyboards.userkb as kb
 
 @user.message(CommandStart())
 async def start(message: Message):
-	await set_user(message.from_user.id)
-	await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
-	await message.answer_photo(photo='https://yt3.googleusercontent.com/zfLrkQRuN_NSn9axjTm2UxuWBKc3t8N1c3QOSPTBTqhwEEWpUj61YK3DQsMRZz_gARtievGS=s900-c-k-c0x00ffffff-no-rj',
+    await set_user(message.from_user.id)
+    await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
+    await message.answer_photo(photo='https://yt3.googleusercontent.com/zfLrkQRuN_NSn9axjTm2UxuWBKc3t8N1c3QOSPTBTqhwEEWpUj61YK3DQsMRZz_gARtievGS=s900-c-k-c0x00ffffff-no-rj',
                                caption='Привет! Я бот "Продолжи сериию в TikTok"! Я готов напомнать тебе об отправке сообщений своим друзьям! Используй кнопки для управления!', reply_markup=kb.main)
 
 @user.message(F.text == 'Новое напоминание.')
@@ -58,21 +58,17 @@ async def save_reminder_time(message: Message, state: FSMContext):
     data = await state.get_data()    
     await save_info_user(message.from_user.id, data["target_time"])     
     await state.clear()
-	await message.answer(f"✅ Напоминание установлено на {time_text}!")
+    await message.answer(f"✅ Напоминание установлено на {time_text}!")
     
 @user.message(F.text == 'Добавить серии с друзьями.')
 async def add_friend_series(message: Message):
-	await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
-	await message.answer('В процессе добавления...',
-					  reply_markup=kb.after_friend_series)
+    await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
+    await message.answer('В процессе добавления...',
+                      reply_markup=kb.after_friend_series)
                         
 @user.message(F.text == 'Назад в меню.')
 async def back_to_menu(message: Message, state: FSMContext):
-	await state.clear()
-	await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
-	await message.answer_photo(photo='https://yt3.googleusercontent.com/zfLrkQRuN_NSn9axjTm2UxuWBKc3t8N1c3QOSPTBTqhwEEWpUj61YK3DQsMRZz_gARtievGS=s900-c-k-c0x00ffffff-no-rj',
+    await state.clear()
+    await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
+    await message.answer_photo(photo='https://yt3.googleusercontent.com/zfLrkQRuN_NSn9axjTm2UxuWBKc3t8N1c3QOSPTBTqhwEEWpUj61YK3DQsMRZz_gARtievGS=s900-c-k-c0x00ffffff-no-rj',
                                caption='Привет! Я бот "Продолжи сериию в TikTok"! Я готов напомнать тебе об отправке сообщений своим друзьям! Используй кнопки для управления!', reply_markup=kb.main)
-
-
-
-
