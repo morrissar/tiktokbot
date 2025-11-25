@@ -7,7 +7,6 @@ class SimpleScheduler:
     def __init__(self, bot):
         self.bot = bot
         self.is_running = False
-        self.task = None
 
     async def send_reminder(self, tg_id):
         """Отправка напоминания пользователю"""
