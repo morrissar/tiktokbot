@@ -25,7 +25,7 @@ async def start(message: Message):
 @user.message(F.text == 'Новое напоминание.')
 async def new_reminder(message: Message, state: FSMContext):
     await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
-    await message.answer('Введите время напоминания в формате "HH:MM", например, 16:30. (Учитывайте часовой пояс МСК+8!)', reply_markup=kb.after_reminder)
+    await message.answer('Введите время напоминания в формате "HH:MM", например, 16:30. (Учитывайте часовой пояс МСК-3!)', reply_markup=kb.after_reminder)
     await state.set_state(Test.target_time)
 
 @user.message(Test.target_time) 
