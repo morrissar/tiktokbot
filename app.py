@@ -3,6 +3,7 @@ import logging
 import asyncio 
 import os
 from dotenv import load_dotenv
+from handlers.admin import admin_router
 
 load_dotenv()
 
@@ -18,31 +19,25 @@ async def main():
     bot = Bot(token=os.getenv('TOKEN'))
     dp = Dispatcher()
     dp.include_router(user)
-    
-    # Инициализация базы данных
+    dp.include_router(admin_router)
     await async_main()
-    print("✅ База данных инициализирована")
-    
-    # Запуск планировщика
+
     scheduler = SimpleScheduler(bot)
     scheduler_task = asyncio.create_task(scheduler.start())
     
     await bot.delete_webhook(drop_pending_updates=True)
     
     try:
-        print("✅ Бот запущен и готов к работе")
         await dp.start_polling(bot)
     except Exception as e:
         print(f'❌ Ошибка: {e}')
     finally:
         print("🛑 Останавливаем бота...")
-        # Останавливаем планировщик
         if hasattr(scheduler, 'stop'):
             await scheduler.stop()
         else:
             scheduler.is_running = False
         
-        # Отменяем задачу планировщика
         if scheduler_task and not scheduler_task.done():
             scheduler_task.cancel()
             try:
