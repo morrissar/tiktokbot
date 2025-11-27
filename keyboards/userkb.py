@@ -2,7 +2,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 main = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='Новое напоминание.')],
-    [KeyboardButton(text='Добавить серии с друзьями.')]
+    [KeyboardButton(text='Добавить серии с друзьями.')],
+    [KeyboardButton(text='Поддержка.')]
 ],  resize_keyboard=True,
     input_field_placeholder='Не забывай про серию!')
 
@@ -13,5 +14,10 @@ after_reminder = ReplyKeyboardMarkup(
 
 after_friend_series = ReplyKeyboardMarkup(
     keyboard=[
-    [KeyboardButton(text = 'Назад в меню.')]
+    [KeyboardButton(text='Назад в меню.')]
     ], resize_keyboard=True, input_field_placeholder='Управление сериями с друзьями...')
+
+after_help = ReplyKeyboardMarkup(
+    keyboard=[
+    [KeyboardButton(text='Отмена')]
+    ], resize_keyboard=True, input_field_placeholder='Ждем ваши обращения...')
