@@ -13,17 +13,14 @@ class SimpleScheduler:
             print(f"🔄 Попытка отправить сообщение пользователю {tg_id}")
             await self.bot.send_message(
                 chat_id=tg_id,
-                text="⏰ Напоминание! Пора продолжить серию в TikTok!"
-            )
+                text="⏰ Напоминание! Пора продолжить серию в TikTok!")
             print(f"✅ Напоминание отправлено пользователю {tg_id}")
         except Exception as e:
             print(f"❌ Ошибка отправки напоминания {tg_id}: {e}")
-            # Подробная информация об ошибке
             import traceback
             print(f"🔍 Детали ошибки: {traceback.format_exc()}")
 
     async def check_reminders(self):
-        """Проверка напоминаний"""
         try:
             now = datetime.datetime.now()
             current_time = now.strftime("%H:%M")
@@ -43,16 +40,11 @@ class SimpleScheduler:
             print(f"❌ Ошибка в проверке напоминаний: {e}")
 
     async def start(self):
-        """Запуск планировщика"""
         self.is_running = True
-        print("✅ Планировщик запущен")
         
         while self.is_running:
             await self.check_reminders()
-            await asyncio.sleep(30)
+            await asyncio.sleep(45)
 
     async def stop(self):
-        """Остановка планировщика"""
         self.is_running = False
-        print("✅ Планировщик остановлен")
-
