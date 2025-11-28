@@ -14,9 +14,9 @@ from scheduler import SimpleScheduler
 
 async def main():
     print("=== Бот запускается ===")
-    print(f"Token: {'*' * 10}{os.getenv('TOKEN')[-4:] if os.getenv('TOKEN') else 'NOT FOUND'}")
+    print(f"Token: {'*' * 10}{os.getenv('BOT_TOKEN')[-4:] if os.getenv('BOT_TOKEN') else 'NOT FOUND'}")
     
-    bot = Bot(token=os.getenv('TOKEN'))
+    bot = Bot(token=os.getenv('BOT_TOKEN'))
     dp = Dispatcher()
     dp.include_router(user)
     dp.include_router(admin_router)
@@ -57,3 +57,4 @@ if __name__ == '__main__':
         print('🛑 Бот выключен по команде пользователя!')
     except Exception as e:
         print(f'❌ Критическая ошибка: {e}')
+
