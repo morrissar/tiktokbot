@@ -83,10 +83,11 @@ async def process_support_question(message: Message, state: FSMContext, bot: Bot
         await message.reply("❌ Обращение отменено.", reply_markup=kb.main)
         return
     try:
-        forwarded_msg = await bot.forward_message(chat_id=-5002243682, from_chat_id=message.chat.id, message_id=message.message_id)
+        forwarded_msg = await bot.forward_message(chat_id=-1005002243682, from_chat_id=message.chat.id, message_id=message.message_id)
         support_data = {'user_id': message.from_user.id, 'original_message_id': message.message_id, 'support_message_id': forwarded_msg.message_id}
         await message.reply("✅ Ваше обращение отправлено в поддержку! Ожидайте ответа в этом чате.", reply_markup=kb.main)
     except Exception as e:
         await message.reply("❌ Произошла ошибка при отправке обращения.", reply_markup=kb.main)
         print(f"Ошибка: {e}")
     await state.clear()
+
