@@ -5,7 +5,7 @@ import keyboards.userkb as kb
 
 admin_router = Router()
 
-@admin_router.message(F.chat.id == -5002243682)
+@admin_router.message(F.chat.id == -1005002243682)
 async def admin_reply(message: Message, bot: Bot):
     if message.reply_to_message and message.reply_to_message.forward_from:
         try:
